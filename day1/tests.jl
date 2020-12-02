@@ -1,7 +1,7 @@
 include("day1.jl")
 using Test
 
-real_input = getInput(1)
+real_input = getInput(1,Int)
 
 test_input = [
 1721
