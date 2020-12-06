@@ -42,3 +42,8 @@ end
 @testset "Part 1" begin
     @test maximum(getSeatId.(real_input)) == 832
 end
+
+@testset "Part 2" begin
+    seatIDs = getSeatId.(real_input)
+    @test getMySeat(seatIDs) == 517
+end

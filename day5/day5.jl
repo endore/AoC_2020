@@ -52,3 +52,24 @@ end
 function getSeatId(row,col)
     return 8row + col
 end
+
+
+function getMySeat(seatIDs)
+    sort!(seatIDs, dims = 1)
+    min = minimum(seatIDs)
+    max = maximum(seatIDs)
+    selection = nothing
+    for id in min:max
+        if length(findall(seatIDs .== id)) == 1
+            continue
+        else
+            prev_id = id - 1
+            next_id = id + 1
+            if (length(findall(seatIDs .== prev_id)) == 1) && (length(findall(seatIDs .== next_id)) == 1)
+                selection = id
+                break
+            end
+        end
+    end
+    return selection
+end
