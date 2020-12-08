@@ -15,12 +15,45 @@ test_input =[
 "dotted black bags contain no other bags."
 ]
 
+test_list = [
+"light red"
+"bright white"
+"muted yellow"
+"dark orange"
+"shiny gold"
+"faded blue"
+"dark olive"
+"vibrant plum"
+"dotted black"
+]
 
-@testset "Test1: getGroups" begin
-    @test getContainGraph(test_input) == test_input_graph
+test_graph = DiGraph(9)
+
+add_edge!(test_graph,1,2)
+add_edge!(test_graph,1,3)
+add_edge!(test_graph,2,5)
+add_edge!(test_graph,3,5)
+add_edge!(test_graph,3,6)
+add_edge!(test_graph,4,2)
+add_edge!(test_graph,4,3)
+add_edge!(test_graph,5,7)
+add_edge!(test_graph,5,8)
+add_edge!(test_graph,7,6)
+add_edge!(test_graph,7,9)
+add_edge!(test_graph,8,6)
+add_edge!(test_graph,8,9)
+
+@testset "Test1: getContainGraph" begin
+    out_graph, out_list = getContainGraph(test_input)
+    @test out_list == test_list
+    @test out_graph == test_graph
+end
+
+@testset "Test1: getCountParentBags" begin
+    @test getCountParentBags(test_graph,test_list) == 4
 end
 
 @testset "Part 1: answer" begin
-    realBags, realList = getContainGraph(real_input)
-    @test getCountParentBags(realBags,realList) == 348
+    real_bags, rea_list = getContainGraph(real_input)
+    @test getCountParentBags(real_bags,real_ist) == 348
 end
