@@ -27,21 +27,21 @@ test_list = [
 "dotted black"
 ]
 
-test_graph = DiGraph(9)
+test_graph = SimpleWeightedDiGraph{Int,Int}(9)
 
-add_edge!(test_graph,1,2)
-add_edge!(test_graph,1,3)
-add_edge!(test_graph,2,5)
-add_edge!(test_graph,3,5)
-add_edge!(test_graph,3,6)
-add_edge!(test_graph,4,2)
-add_edge!(test_graph,4,3)
-add_edge!(test_graph,5,7)
-add_edge!(test_graph,5,8)
-add_edge!(test_graph,7,6)
-add_edge!(test_graph,7,9)
-add_edge!(test_graph,8,6)
-add_edge!(test_graph,8,9)
+add_edge!(test_graph,1,2,1)
+add_edge!(test_graph,1,3,2)
+add_edge!(test_graph,2,5,1)
+add_edge!(test_graph,3,5,2)
+add_edge!(test_graph,3,6,9)
+add_edge!(test_graph,4,2,3)
+add_edge!(test_graph,4,3,4)
+add_edge!(test_graph,5,7,1)
+add_edge!(test_graph,5,8,2)
+add_edge!(test_graph,7,6,3)
+add_edge!(test_graph,7,9,4)
+add_edge!(test_graph,8,6,5)
+add_edge!(test_graph,8,9,6)
 
 @testset "Test1: getContainGraph" begin
     out_graph, out_list = getContainGraph(test_input)
@@ -54,6 +54,6 @@ end
 end
 
 @testset "Part 1: answer" begin
-    real_bags, rea_list = getContainGraph(real_input)
-    @test getCountParentBags(real_bags,real_ist) == 348
+    real_bags, real_list = getContainGraph(real_input)
+    @test getCountParentBags(real_bags,real_list) == 348
 end

@@ -3,7 +3,7 @@
 
 include("..\\utils\\utils.jl")
 
-using LightGraphs
+using LightGraphs, SimpleWeightedGraphs
 
 function getCountParentBags(bagGraph,bagList; bag_name = "shiny gold")
     bag_index = findall(bagList .== bag_name)[1]
@@ -13,8 +13,8 @@ end
 
 function getContainGraph(input)
 
-    # initiate empty directed graph
-    bagGraph = DiGraph()
+    # initiate empty directed graph with weights
+    bagGraph = SimpleWeightedDiGraph{Int,Int}()
 
     # initiate empty list of bag names
     bagList = Array{String,1}()
@@ -23,13 +23,13 @@ function getContainGraph(input)
         # parse line: get parent_bag, child bags
         parent_bag = getParentBag(line)
 
-        child_bags = getChildBags(line)
+        child_bags, child_weights = getChildBagsAndWeights(line)
 
         # updateBagList
         updateBagList!(bagList,parent_bag,child_bags)
 
         # update barGraph
-        updateBagGraph!(bagGraph,bagList,parent_bag,child_bags)
+        updateBagGraph!(bagGraph,bagList,parent_bag,child_bags,child_weights)
     end
 
     return bagGraph, bagList
@@ -60,6 +60,28 @@ function getChildBags(line)
     return child_bags
 end
 
+function getChildBagsAndWeights(line)
+    regPattern = r"^([a-z]+ [a-z]+) bags contain (.*).$"
+
+    child_bags = Array{String,1}()
+    child_weights = Array{Int,1}()
+
+    child_bags_group = match(regPattern, line).captures[2]
+    no_child_string = "no other bags"
+
+    child_regPattern = r"^([0-9]+) ([a-z]+ [a-z]+) bag[s]?"
+
+    if child_bags_group != no_child_string
+        child_bags_raw = split(child_bags_group,", ")
+
+        child_bags = [match(child_regPattern,raw_child).captures[2] for raw_child in child_bags_raw]
+        child_weights = [match(child_regPattern,raw_child).captures[1] for raw_child in child_bags_raw]
+        child_weights = parse.(Int,child_weights)
+    end
+    return child_bags, child_weights
+end
+
+
 function updateBagList!(bagList,parent_bag,child_bags)
     check_bags = deepcopy(child_bags)
     pushfirst!(check_bags,parent_bag)
@@ -72,7 +94,7 @@ function updateBagList!(bagList,parent_bag,child_bags)
     end
 end
 
-function updateBagGraph!(bagGraph,bagList,parent_bag,child_bags)
+function updateBagGraph!(bagGraph,bagList,parent_bag,child_bags, child_weights)
     # add new vertices
     original_size = length(vertices(bagGraph))
     new_size = length(bagList)
@@ -85,8 +107,10 @@ function updateBagGraph!(bagGraph,bagList,parent_bag,child_bags)
     # add new edges based on order in bagList
     parent_index = findall(bagList .== parent_bag)[1]
 
-    for child_bag in child_bags
+    for i in 1:length(child_bags)
+        child_bag = child_bags[i]
+        child_weight = child_weights[i]
         child_index = findall(bagList .== child_bag)[1]
-        add_edge!(bagGraph,parent_index,child_index)
+        add_edge!(bagGraph,parent_index,child_index,child_weight)
     end
 end
