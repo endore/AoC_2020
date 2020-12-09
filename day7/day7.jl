@@ -114,3 +114,14 @@ function updateBagGraph!(bagGraph,bagList,parent_bag,child_bags, child_weights)
         add_edge!(bagGraph,parent_index,child_index,child_weight)
     end
 end
+
+
+function getTotalBagsIn(bagGraph,parent)
+    count = 0
+    for child in neighbors(bagGraph,parent)
+        # add child weight to count
+        child_weight = weights(bagGraph)[parent,child]
+        count += child_weight* (1 + getTotalBagsIn(bagGraph,child))
+    end
+    return count
+end

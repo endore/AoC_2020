@@ -53,7 +53,27 @@ end
     @test getCountParentBags(test_graph,test_list) == 4
 end
 
+@testset "Part 2: test getTotalBagsIn parent with no child" begin
+    @test getTotalBagsIn(test_graph,6) == 0
+    @test getTotalBagsIn(test_graph,9) == 0
+end
+
+@testset "Part 2: test getTotalBagsIn parent with 1 level of children" begin
+    @test getTotalBagsIn(test_graph,7) == 7
+    @test getTotalBagsIn(test_graph,8) == 11
+end
+
+@testset "Part 2: test getTotalBagsIn parent with shiny gold index" begin
+    @test getTotalBagsIn(test_graph,5) == 32
+end
+
+real_bags, real_list = getContainGraph(real_input)
+real_index = findall(real_list .== "shiny gold")[1]
+
 @testset "Part 1: answer" begin
-    real_bags, real_list = getContainGraph(real_input)
     @test getCountParentBags(real_bags,real_list) == 348
+end
+
+@testset "Part 2: answer" begin
+    @test getTotalBagsIn(real_bags,real_index) == 18885
 end
