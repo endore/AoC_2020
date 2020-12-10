@@ -16,9 +16,19 @@ test_input =[
 ]
 
 @testset "Test1: getAccBeforeRepeat" begin
-    @test getAccBeforeRepeat(test_input) == 5
+    acc, index = getAccAndLastIndex(test_input)
+    @test acc == 5
+end
+
+@testset "Test2: getOneFixAcc" begin
+    @test getOneFixAcc(test_input) == 8
 end
 
 @testset "Part 1: answer" begin
-    @test getAccBeforeRepeat(real_input) == 1915
+    acc, index = getAccAndLastIndex(real_input)
+    @test acc == 1915
+end
+
+@testset "Part 2: answer" begin
+    @test getOneFixAcc(real_input) == 944
 end
