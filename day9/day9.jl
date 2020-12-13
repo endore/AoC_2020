@@ -30,3 +30,18 @@ function isValueIValid(input,i,preamble_length)
     end
     return valid
 end
+
+
+function getContiguousList(input, value)
+    contg_list = Array{Int,1}()
+    input_length = length(input)
+    for start_index in 1:length(input), list_length in 2:(input_length+1-start_index)
+        last_index = start_index + list_length - 1
+        checked_list = input[start_index:last_index]
+        if sum(checked_list) == value
+            contg_list = checked_list
+            break
+        end
+    end
+    return contg_list
+end
