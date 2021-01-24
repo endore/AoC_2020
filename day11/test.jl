@@ -82,7 +82,38 @@ end
     @test getCount(test_empty_end_state) == 4
 end
 
+@testset "Test1: test input count" begin
+    test_input_end_state = getEndState(test_input1)
+    @test getCount(test_input_end_state) == 37
+end
+
+@testset "Test2: empty 3x3 next state" begin
+    @test getNextState2(test_empty) == test_occupied
+end
+
+@testset "Test2: floor 3x3 next state" begin
+    @test getNextState2(test_floor) == test_floor
+end
+
+@testset "Test2: occupied 3x3 next state" begin
+    @test getNextState2(test_occupied) == test_empty_end_state
+end
+
+@testset "Test2: empty 3x3 end state" begin
+    @test getEndState2(test_empty) == test_empty_end_state
+end
+
+@testset "Test2: test input count" begin
+    test_input_end_state2 = getEndState2(test_input1)
+    @test getCount(test_input_end_state2) == 26
+end
+
 @testset "Part1: get EndState and final occupied seats" begin
     real_input_end_state = getEndState(real_input)
     @test getCount(real_input_end_state) == 2418
+end
+
+@testset "Part2: get EndState and final occupied seats" begin
+    real_input_end_state2 = getEndState2(real_input)
+    @test getCount(real_input_end_state2) == 2144
 end
